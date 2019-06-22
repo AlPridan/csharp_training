@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace addressbook_web_tests
+namespace figures_tests
 {
     [TestClass]
-    public class UnitTest1
+    public class FiguresTests
     {
         [TestMethod]
         public void TestMethodSquare()

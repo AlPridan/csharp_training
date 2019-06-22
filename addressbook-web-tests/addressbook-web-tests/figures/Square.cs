@@ -4,21 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace addressbook_web_tests
+namespace figures_tests
 {
-    class Figure
+    class Square : Figure
     {
-        private bool colored = false;
+        private int size;
 
-        private bool Colored
+        public Square(int size)
+        {
+            this.size = size;
+        }
+
+        public int Size
         {
             get
             {
-                return colored;
+                return size;
             }
             set
             {
-                colored = value;
+                size = value;
             }
         }
     }
