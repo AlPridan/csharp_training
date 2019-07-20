@@ -1,8 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace WebAddressbookTests
 {
@@ -12,9 +8,9 @@ namespace WebAddressbookTests
         [Test]
         public void ContactCreatonTest()
         {
-            GoToHomePage();
-            Login(new AccountData("admin", "secret"));
-            GoToNewContact();
+            app.Navigator.GoToHomePage();
+            app.Auth.Login(new AccountData("admin", "secret"));
+            app.Navigator.GoToNewContact();
             ContactData group = new ContactData("Micky");
             group.MiddleName = "Rat";
             group.SecNotes = "some of the text";
@@ -39,8 +35,8 @@ namespace WebAddressbookTests
             group.ADay = "5";
             group.AMonth = "May";
             group.AYear = "1995";
-            FillContactForm(group);
-            Submit();
+            app.Contacts.FillContactForm(group);
+            app.Groups.Submit();
         }
 
     }

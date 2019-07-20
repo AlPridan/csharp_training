@@ -1,111 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
+using System.Text.RegularExpressions;
 
 namespace WebAddressbookTests
 {
-    public class TestBase
+    public class ContactHelper:HelperBase
     {
-        protected IWebDriver driver;
-        private StringBuilder verificationErrors;
-        protected string baseURL;
+        protected bool acceptNextAlert;
 
-        [SetUp]
-        public void SetupTest()
+        public ContactHelper(IWebDriver driver) : base(driver)
         {
-            driver = new ChromeDriver();
-            baseURL = "http://localhost";
-            verificationErrors = new StringBuilder();
         }
 
-        [TearDown]
-        public void TeardownTest()
+        public void SelectChbox(int index)
+        {
+            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (index + 1) + "]/td/input")).Click();
+        }
+
+        // ALerts
+        public void Alerts(bool choose)
+        {
+            acceptNextAlert = choose;
+        }
+
+        public string CloseAlertAndGetItsText()
         {
             try
             {
-                driver.Quit();
+                IAlert alert = driver.SwitchTo().Alert();
+                string alertText = alert.Text;
+                if (acceptNextAlert)
+                {
+                    alert.Accept();
+                }
+                else
+                {
+                    alert.Dismiss();
+                }
+                return alertText;
             }
-            catch (Exception)
+            finally
             {
-                // Ignore errors if unable to close the browser
+                acceptNextAlert = true;
             }
-            Assert.AreEqual("", verificationErrors.ToString());
         }
 
-        protected void GoToHomePage()
+        public void CloseAlert()
         {
-            driver.Navigate().GoToUrl(baseURL + "/addressbook/");
+            Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(), "^Delete 1 addresses[\\s\\S]$"));
         }
 
-        protected void Login(AccountData account)
-        {
-            driver.FindElement(By.Name("user")).Clear();
-            driver.FindElement(By.Name("user")).SendKeys(account.Username);
-            driver.FindElement(By.Name("pass")).Clear();
-            driver.FindElement(By.Name("pass")).SendKeys(account.Password);
-            driver.FindElement(By.CssSelector("input[type =\"submit\"]")).Click();
-        }
-
-        //select
-        protected void Select(int index)
-        {
-            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
-        }
-
-        //remove group
-        protected void RemoveGroup()
-        {
-            driver.FindElement(By.Name("delete")).Click();
-        }
-
-        //submit button
-        protected void Submit()
-        {
-            driver.FindElement(By.Name("submit")).Click();
-        }
-
-        //linked texts
-        protected void GoToHome()
-        {
-            driver.FindElement(By.LinkText("home")).Click();
-        }
-
-        protected void GoToNewContact()
-        {
-            driver.FindElement(By.LinkText("add new")).Click();
-        }
-        protected void GoToGroups()
-
-        {
-            driver.FindElement(By.LinkText("groups")).Click();
-        }
-
-        //Groups
-        protected void FillGroupForm(GroupData group)
-        {
-            driver.FindElement(By.Name("group_name")).Click();
-            driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
-            driver.FindElement(By.Name("group_header")).Clear();
-            driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
-            driver.FindElement(By.Name("group_footer")).Clear();
-            driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
-        }
-
-        protected void InitNewGroupCreation()
-        {
-            driver.FindElement(By.Name("new")).Click();
-        }
- 
-        //Contacts
-
-        protected void FillContactForm(ContactData group)
+        public void FillContactForm(ContactData group)
         {
             driver.FindElement(By.Name("firstname")).Click();
             driver.FindElement(By.Name("firstname")).Clear();
