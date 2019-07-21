@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using System;
 using System.Text.RegularExpressions;
 
 namespace WebAddressbookTests
@@ -9,19 +10,58 @@ namespace WebAddressbookTests
     {
         protected bool acceptNextAlert;
 
-        public ContactHelper(IWebDriver driver) : base(driver)
+        public ContactHelper(ApplicationManager manager) 
+            : base(manager)
         {
         }
 
-        public void SelectChbox(int index)
+        public ContactHelper RemoveContact(int b)
+        {
+            manager.Navigator.GoToHome();
+            SelectChbox(b);
+            Alerts(true);
+            manager.Groups.DeleteBtn();
+            CloseAlert();
+            manager.Navigator.GoToHome();
+            return this;
+        }
+
+        public ContactHelper Modify(int b, ContactData newData)
+        {
+            manager.Navigator.GoToHome();
+            SelectChbox(b);
+            InitContactModification();
+            FillContactForm(newData);
+            manager.Groups.Submit();
+            manager.Navigator.GoToHome();
+            return this;
+        }
+
+        public ContactHelper InitContactModification()
+        {
+            driver.FindElement(By.XPath("//img[@alt='Edit']")).Click();
+            return this;
+        }
+
+        public ContactHelper CreateContact(ContactData group)
+        {
+            manager.Navigator.GoToNewContact();
+            FillContactForm(group);
+            manager.Groups.Submit();
+            return this;
+        }
+
+        public ContactHelper SelectChbox(int index)
         {
             driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (index + 1) + "]/td/input")).Click();
+            return this;
         }
 
         // ALerts
-        public void Alerts(bool choose)
+        public ContactHelper Alerts(bool choose)
         {
             acceptNextAlert = choose;
+            return this;
         }
 
         public string CloseAlertAndGetItsText()
@@ -46,12 +86,13 @@ namespace WebAddressbookTests
             }
         }
 
-        public void CloseAlert()
+        public ContactHelper CloseAlert()
         {
             Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(), "^Delete 1 addresses[\\s\\S]$"));
+            return this;
         }
 
-        public void FillContactForm(ContactData group)
+        public ContactHelper FillContactForm(ContactData group)
         {
             driver.FindElement(By.Name("firstname")).Click();
             driver.FindElement(By.Name("firstname")).Clear();
@@ -109,6 +150,7 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("phone2")).SendKeys(group.SecHome);
             driver.FindElement(By.Name("notes")).Clear();
             driver.FindElement(By.Name("notes")).SendKeys(group.SecNotes);
+            return this;
         }
     }
 }

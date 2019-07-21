@@ -8,9 +8,6 @@ namespace WebAddressbookTests
         [Test]
         public void ContactCreatonTest()
         {
-            app.Navigator.GoToHomePage();
-            app.Auth.Login(new AccountData("admin", "secret"));
-            app.Navigator.GoToNewContact();
             ContactData group = new ContactData("Micky");
             group.MiddleName = "Rat";
             group.SecNotes = "some of the text";
@@ -35,9 +32,9 @@ namespace WebAddressbookTests
             group.ADay = "5";
             group.AMonth = "May";
             group.AYear = "1995";
-            app.Contacts.FillContactForm(group);
-            app.Groups.Submit();
-        }
 
+            app.Contacts.CreateContact(group);
+
+        }
     }
 }

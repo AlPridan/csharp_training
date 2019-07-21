@@ -19,12 +19,19 @@ namespace WebAddressbookTests
             driver = new ChromeDriver();
             baseURL = "http://localhost";
 
-            loginHelper = new LoginHelper(driver);
-            navigator = new NavigatonHelper(driver, baseURL);
-            groupHelper = new GroupHelper(driver);
-            contactHelper = new ContactHelper(driver);
+            loginHelper = new LoginHelper(this);
+            navigator = new NavigatonHelper(this,baseURL);
+            groupHelper = new GroupHelper(this);
+            contactHelper = new ContactHelper(this);
         }
 
+        public IWebDriver Driver
+        {
+            get
+            {
+                return driver;
+            }
+        }
         public void Stop()
         {
             try

@@ -6,7 +6,8 @@ namespace WebAddressbookTests
     {
         private string baseURL;
 
-        public NavigatonHelper(IWebDriver driver, string baseURL):base(driver)
+        public NavigatonHelper(ApplicationManager manager,string baseURL) 
+            :base(manager)
         {
             this.baseURL = baseURL;
         }
