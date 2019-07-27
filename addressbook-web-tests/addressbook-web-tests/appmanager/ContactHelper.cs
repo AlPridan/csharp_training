@@ -29,17 +29,16 @@ namespace WebAddressbookTests
         public ContactHelper Modify(int b, ContactData newData)
         {
             manager.Navigator.GoToHome();
-            SelectChbox(b);
-            InitContactModification();
+            InitContactModification(b);
             FillContactForm(newData);
             manager.Groups.Submit();
             manager.Navigator.GoToHome();
             return this;
         }
 
-        public ContactHelper InitContactModification()
+        public ContactHelper InitContactModification(int b)
         {
-            driver.FindElement(By.XPath("//img[@alt='Edit']")).Click();
+            driver.FindElement(By.XPath("//tr["+ (b+1) +"]/td[8]/a/img")).Click();
             return this;
         }
 
