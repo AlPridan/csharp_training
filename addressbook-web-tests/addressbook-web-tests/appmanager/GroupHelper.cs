@@ -25,6 +25,7 @@ namespace WebAddressbookTests
         public GroupHelper Modify(int v, GroupData newData)
         {
             manager.Navigator.GoToGroups();
+            IfNoGroup();
             Select(v);
             InitGroupModification();
             FillGroupForm(newData);
@@ -36,10 +37,20 @@ namespace WebAddressbookTests
         public GroupHelper RemoveGroup(int v)
         {
             manager.Navigator.GoToGroups();
+            IfNoGroup();
             Select(v);
             DeleteBtn();
             manager.Navigator.GoToGroups();
             return this;
+        }
+
+        private void IfNoGroup()
+        {
+            if (!IsElementPresent(By.Name("selected[]")))
+            {
+                GroupData group = new GroupData("Num1");
+                CreateGroup(group);
+            }
         }
 
         public GroupHelper Select(int index)
@@ -68,14 +79,13 @@ namespace WebAddressbookTests
 
         public GroupHelper FillGroupForm(GroupData group)
         {
-            driver.FindElement(By.Name("group_name")).Click();
-            driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
-            driver.FindElement(By.Name("group_header")).Clear();
-            driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
-            driver.FindElement(By.Name("group_footer")).Clear();
-            driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
+            Type(By.Name("group_name"), group.Name);
+            Type(By.Name("group_header"), group.Header);
+            Type(By.Name("group_footer"), group.Footer);
             return this;
         }
+
+
 
         public GroupHelper InitNewGroupCreation()
         {

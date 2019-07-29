@@ -12,14 +12,14 @@ namespace WebAddressbookTests
 {
     [TestFixture]
 
-    public class GroupModificatonTests:TestBase
+    public class GroupModificatonTests: AuthTestBase
     {
         [Test]
         public void GroupModificatioTest()
         {
             GroupData newData = new GroupData("mod1");
-            newData.Header = "mod2";
-            newData.Footer = "mod3";
+            newData.Header = null;
+            newData.Footer = null;
 
             app.Groups.Modify(1, newData);
         }
