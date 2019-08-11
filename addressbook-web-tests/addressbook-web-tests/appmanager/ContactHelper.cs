@@ -18,7 +18,6 @@ namespace WebAddressbookTests
         public ContactHelper RemoveContact(int b)
         {
             manager.Navigator.GoToHome();
-            IfNoContact();
             manager.Navigator.GoToHome();
             SelectChbox(b);
             Alerts(true);
@@ -28,7 +27,7 @@ namespace WebAddressbookTests
             return this;
         }
 
-        private void IfNoContact()
+        public ContactHelper IfNoContact()
         {
             if (!IsElementPresent(By.Name("selected[]")))
             {
@@ -37,11 +36,11 @@ namespace WebAddressbookTests
                 contact.LastName = "Fun";
                 CreateContact(contact);
             }
+            return this;
         }
 
         public ContactHelper Modify(int b, ContactData newData)
         {
-            IfNoContact();
             manager.Navigator.GoToHome();
             InitContactModification(b);
             FillContactForm(newData);

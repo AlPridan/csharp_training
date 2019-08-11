@@ -42,6 +42,7 @@ namespace WebAddressbookTests
             newData.AMonth = null;
             newData.AYear = null;
 
+            app.Contacts.IfNoContact();
             app.Contacts.Modify(1, newData);
         }
     }

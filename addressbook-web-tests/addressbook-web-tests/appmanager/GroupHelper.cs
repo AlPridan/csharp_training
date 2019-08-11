@@ -25,7 +25,6 @@ namespace WebAddressbookTests
         public GroupHelper Modify(int v, GroupData newData)
         {
             manager.Navigator.GoToGroups();
-            IfNoGroup();
             Select(v);
             InitGroupModification();
             FillGroupForm(newData);
@@ -37,20 +36,20 @@ namespace WebAddressbookTests
         public GroupHelper RemoveGroup(int v)
         {
             manager.Navigator.GoToGroups();
-            IfNoGroup();
             Select(v);
             DeleteBtn();
             manager.Navigator.GoToGroups();
             return this;
         }
 
-        private void IfNoGroup()
+        public GroupHelper IfNoGroup()
         {
             if (!IsElementPresent(By.Name("selected[]")))
             {
                 GroupData group = new GroupData("Num1");
                 CreateGroup(group);
             }
+            return this;
         }
 
         public GroupHelper Select(int index)
