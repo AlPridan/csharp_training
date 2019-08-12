@@ -22,7 +22,7 @@ namespace WebAddressbookTests
             manager.Navigator.GoToHome();
             SelectChbox(b);
             Alerts(true);
-            manager.Groups.DeleteBtn();
+            DeleteBtn();
             CloseAlert();
             manager.Navigator.GoToHome();
             return this;
@@ -45,21 +45,9 @@ namespace WebAddressbookTests
             manager.Navigator.GoToHome();
             InitContactModification(b);
             FillContactForm(newData);
-            manager.Groups.Submit();
+            Submit();
             manager.Navigator.GoToHome();
             return this;
-        }
-
-        public List<ContactData> GetContactsList()
-        {
-            List<ContactData> contacts = new List<ContactData>();
-            manager.Navigator.GoToHome();
-            ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("tr[name=entry]"));
-            foreach(IWebElement element in elements)
-            {
-                contacts.Add(new ContactData(element.FindElement(By.XPath(".//td[3]")).Text, element.FindElement(By.XPath(".//td[2]")).Text));
-            }
-            return contacts;
         }
 
         public ContactHelper InitContactModification(int b)
@@ -72,13 +60,26 @@ namespace WebAddressbookTests
         {
             manager.Navigator.GoToNewContact();
             FillContactForm(group);
-            manager.Groups.Submit();
+            Submit();
             return this;
         }
 
         public ContactHelper SelectChbox(int index)
         {
             driver.FindElement(By.XPath("//tr[" + (index + 2) + "]/td/input")).Click();
+            return this;
+        }
+
+        public ContactHelper Submit()
+        {
+            driver.FindElement(By.XPath("//input[@type='submit']")).Click();
+            contactCache = null;
+            return this;
+        }
+
+        public ContactHelper DeleteBtn()
+        {
+            driver.FindElement(By.XPath("//input[starts-with(@value,'Delete')]")).Click();
             return this;
         }
 
@@ -114,6 +115,7 @@ namespace WebAddressbookTests
         public ContactHelper CloseAlert()
         {
             Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(), "^Delete 1 addresses[\\s\\S]$"));
+            contactCache = null;
             return this;
         }
 
@@ -144,6 +146,28 @@ namespace WebAddressbookTests
             Type(By.Name("phone2"), group.SecHome);
             Type(By.Name("notes"), group.SecNotes);
             return this;
+        }
+
+        private List<ContactData> contactCache = null;
+
+        public List<ContactData> GetContactsList()
+        {
+            if(contactCache == null)
+            {
+                contactCache = new List<ContactData>();
+                manager.Navigator.GoToHome();
+                ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("tr[name=entry]"));
+                foreach (IWebElement element in elements)
+                {
+                    contactCache.Add(new ContactData(element.FindElement(By.XPath(".//td[2]")).Text, element.FindElement(By.XPath(".//td[3]")).Text));
+                }
+            }
+             return new List<ContactData>(contactCache);
+        }
+
+        public int GetContactCount()
+        {
+            return driver.FindElements(By.CssSelector("tr[name=entry]")).Count;
         }
     }
 }

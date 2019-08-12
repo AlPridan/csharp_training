@@ -23,7 +23,7 @@ namespace WebAddressbookTests
 
         public void GoToHome()
         {
-            if (driver.Url == baseURL + "/addressbook/group.php"
+            if (driver.Url == baseURL + "/addressbook/"
                 && IsElementPresent(By.XPath("//input[@value='Send e-Mail']")))
             {
                 return;

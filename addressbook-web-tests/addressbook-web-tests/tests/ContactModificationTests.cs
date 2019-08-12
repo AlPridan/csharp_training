@@ -41,10 +41,10 @@ namespace WebAddressbookTests
             newData.ADay = null;
             newData.AMonth = null;
             newData.AYear = null;
+            app.Contacts.IfNoContact();
 
             List<ContactData> oldContacts = app.Contacts.GetContactsList();
 
-            app.Contacts.IfNoContact();
             app.Contacts.Modify(0, newData);
 
             List<ContactData> newContacts = app.Contacts.GetContactsList();
