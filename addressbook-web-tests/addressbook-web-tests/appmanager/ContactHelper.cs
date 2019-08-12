@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace WebAddressbookTests
@@ -31,7 +32,7 @@ namespace WebAddressbookTests
         {
             if (!IsElementPresent(By.Name("selected[]")))
             {
-                ContactData contact = new ContactData("someone");
+                ContactData contact = new ContactData("someone","else");
                 contact.Address = "Street";
                 contact.LastName = "Fun";
                 CreateContact(contact);
@@ -49,9 +50,21 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public List<ContactData> GetContactsList()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            manager.Navigator.GoToHome();
+            ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("tr[name=entry]"));
+            foreach(IWebElement element in elements)
+            {
+                contacts.Add(new ContactData(element.FindElement(By.XPath(".//td[3]")).Text, element.FindElement(By.XPath(".//td[2]")).Text));
+            }
+            return contacts;
+        }
+
         public ContactHelper InitContactModification(int b)
         {
-            driver.FindElement(By.XPath("(//img[@alt='Edit'])[" + b + "]")).Click();
+            driver.FindElement(By.XPath("(//img[@alt='Edit'])[" + (b+1) + "]")).Click();
             return this;
         }
 
@@ -65,7 +78,7 @@ namespace WebAddressbookTests
 
         public ContactHelper SelectChbox(int index)
         {
-            driver.FindElement(By.XPath("//tr[" + (index + 1) + "]/td/input")).Click();
+            driver.FindElement(By.XPath("//tr[" + (index + 2) + "]/td/input")).Click();
             return this;
         }
 

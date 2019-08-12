@@ -17,7 +17,7 @@ namespace WebAddressbookTests
         [Test]
         public void ContactModificationTest()
         {
-            ContactData newData = new ContactData("MUR");
+            ContactData newData = new ContactData("MUR","NIT");
             newData.MiddleName = null;
             newData.SecNotes = null;
             newData.BDay = "15";
@@ -42,8 +42,16 @@ namespace WebAddressbookTests
             newData.AMonth = null;
             newData.AYear = null;
 
+            List<ContactData> oldContacts = app.Contacts.GetContactsList();
+
             app.Contacts.IfNoContact();
-            app.Contacts.Modify(1, newData);
+            app.Contacts.Modify(0, newData);
+
+            List<ContactData> newContacts = app.Contacts.GetContactsList();
+            oldContacts[0].Name = newData.Name;
+            oldContacts.Sort();
+            newContacts.Sort();
+            Assert.AreEqual(oldContacts, newContacts);
         }
     }
 }
