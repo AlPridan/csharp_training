@@ -29,7 +29,7 @@ namespace WebAddressbookTests
             contact.Email3 = "mm3@disney.com";
             contact.HomePage = "neverMore.com";
             contact.SecAddress = "Krizhopol 3st";
-            contact.SecHome = "35 building";
+            //contact.SecHome = "35 building";
             contact.ADay = "5";
             contact.AMonth = "May";
             contact.AYear = "1995";
