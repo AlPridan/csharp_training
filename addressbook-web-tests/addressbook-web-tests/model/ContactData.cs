@@ -5,9 +5,7 @@ namespace WebAddressbookTests
     public class ContactData:IEquatable<ContactData>,IComparable<ContactData>
     {
 
-        public string Name;
-
-        public ContactData(string firstName,string lastName)
+        public ContactData(string firstName, string lastName)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -23,8 +21,11 @@ namespace WebAddressbookTests
             {
                 return true;
             }
-            Name = FirstName + LastName;
-            return Name == other.FirstName + other.LastName;
+            if (LastName == other.LastName)
+            {
+                return FirstName == other.FirstName;
+            }
+            return LastName == other.LastName;
         }
 
         public override int GetHashCode()
@@ -34,7 +35,7 @@ namespace WebAddressbookTests
 
         public override string ToString()
         {
-            return "name=" + Name;
+            return "name=" + FirstName + LastName;
         }
 
         public int CompareTo(ContactData other)
@@ -43,8 +44,11 @@ namespace WebAddressbookTests
             {
                 return 1;
             }
-            Name = FirstName + LastName;
-            return Name.CompareTo(other.FirstName + other.LastName);
+            if (LastName == other.LastName)
+            {
+                return FirstName.CompareTo(other.FirstName);
+            }
+            return LastName.CompareTo(other.LastName);
         }
 
         public string FirstName { get; set; }
